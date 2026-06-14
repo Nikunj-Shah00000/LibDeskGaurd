@@ -1,0 +1,122 @@
+import { z } from "zod/v4";
+export declare const noiseReportsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "noise_reports";
+    schema: undefined;
+    columns: {
+        id: import("drizzle-orm/pg-core").PgColumn<{
+            name: "id";
+            tableName: "noise_reports";
+            dataType: "number";
+            columnType: "PgSerial";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        seatId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "seat_id";
+            tableName: "noise_reports";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        seatNumber: import("drizzle-orm/pg-core").PgColumn<{
+            name: "seat_number";
+            tableName: "noise_reports";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        zone: import("drizzle-orm/pg-core").PgColumn<{
+            name: "zone";
+            tableName: "noise_reports";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        level: import("drizzle-orm/pg-core").PgColumn<{
+            name: "level";
+            tableName: "noise_reports";
+            dataType: "string";
+            columnType: "PgText";
+            data: string;
+            driverParam: string;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        reportedAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "reported_at";
+            tableName: "noise_reports";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+export declare const insertNoiseReportSchema: z.ZodObject<{
+    zone: z.ZodString;
+    seatId: z.ZodInt;
+    seatNumber: z.ZodString;
+    level: z.ZodString;
+}, {
+    out: {};
+    in: {};
+}>;
+export type InsertNoiseReport = z.infer<typeof insertNoiseReportSchema>;
+export type NoiseReport = typeof noiseReportsTable.$inferSelect;
+//# sourceMappingURL=noise.d.ts.map

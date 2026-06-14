@@ -1,0 +1,122 @@
+import { z } from "zod/v4";
+export declare const occupancyLogsTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "occupancy_logs";
+    schema: undefined;
+    columns: {
+        id: import("drizzle-orm/pg-core").PgColumn<{
+            name: "id";
+            tableName: "occupancy_logs";
+            dataType: "number";
+            columnType: "PgSerial";
+            data: number;
+            driverParam: number;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: true;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        hour: import("drizzle-orm/pg-core").PgColumn<{
+            name: "hour";
+            tableName: "occupancy_logs";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        dayOfWeek: import("drizzle-orm/pg-core").PgColumn<{
+            name: "day_of_week";
+            tableName: "occupancy_logs";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        occupiedCount: import("drizzle-orm/pg-core").PgColumn<{
+            name: "occupied_count";
+            tableName: "occupancy_logs";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        totalSeats: import("drizzle-orm/pg-core").PgColumn<{
+            name: "total_seats";
+            tableName: "occupancy_logs";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
+            notNull: true;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        loggedAt: import("drizzle-orm/pg-core").PgColumn<{
+            name: "logged_at";
+            tableName: "occupancy_logs";
+            dataType: "date";
+            columnType: "PgTimestamp";
+            data: Date;
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+    };
+    dialect: "pg";
+}>;
+export declare const insertOccupancyLogSchema: z.ZodObject<{
+    hour: z.ZodInt;
+    dayOfWeek: z.ZodInt;
+    occupiedCount: z.ZodInt;
+    totalSeats: z.ZodInt;
+}, {
+    out: {};
+    in: {};
+}>;
+export type InsertOccupancyLog = z.infer<typeof insertOccupancyLogSchema>;
+export type OccupancyLog = typeof occupancyLogsTable.$inferSelect;
+//# sourceMappingURL=occupancylogs.d.ts.map
