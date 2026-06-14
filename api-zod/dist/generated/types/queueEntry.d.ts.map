@@ -1,0 +1,1 @@
+{"version":3,"file":"queueEntry.d.ts","sourceRoot":"","sources":["../../../src/generated/types/queueEntry.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,MAAM,WAAW,UAAU;IACzB,EAAE,EAAE,MAAM,CAAC;IACX,WAAW,EAAE,MAAM,CAAC;IACpB,QAAQ,EAAE,MAAM,CAAC;IACjB,MAAM,EAAE,MAAM,CAAC;IACf,gBAAgB;IAChB,kBAAkB,CAAC,EAAE,MAAM,GAAG,IAAI,CAAC;CACpC"}

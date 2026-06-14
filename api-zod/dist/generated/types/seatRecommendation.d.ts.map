@@ -1,0 +1,1 @@
+{"version":3,"file":"seatRecommendation.d.ts","sourceRoot":"","sources":["../../../src/generated/types/seatRecommendation.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,IAAI,EAAE,MAAM,QAAQ,CAAC;AAEnC,MAAM,WAAW,kBAAkB;IACjC,IAAI,EAAE,IAAI,CAAC;IACX,KAAK,EAAE,MAAM,CAAC;IACd,OAAO,EAAE,MAAM,EAAE,CAAC;CACnB"}
