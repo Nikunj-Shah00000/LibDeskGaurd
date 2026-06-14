@@ -1,0 +1,774 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: DeskGuard API — library seat management with smart features
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: auth
+  - name: seats
+  - name: stats
+  - name: activity
+  - name: profile
+  - name: queue
+  - name: noise
+  - name: gamification
+  - name: lostfound
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Log out
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+
+  /seats:
+    get:
+      operationId: listSeats
+      tags: [seats]
+      summary: List all seats
+      responses:
+        "200":
+          description: All seats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Seat"
+
+  /seats/recommend:
+    get:
+      operationId: getRecommendedSeat
+      tags: [seats]
+      summary: Get smart seat recommendation
+      parameters:
+        - name: quietZone
+          in: query
+          schema:
+            type: boolean
+        - name: needsPower
+          in: query
+          schema:
+            type: boolean
+        - name: groupSize
+          in: query
+          schema:
+            type: integer
+        - name: zone
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Recommended seat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SeatRecommendation"
+        "404":
+          description: No seats available
+
+  /seats/{id}:
+    get:
+      operationId: getSeat
+      tags: [seats]
+      summary: Get a seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Seat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seat"
+        "404":
+          description: Not found
+
+  /seats/{id}/checkin:
+    post:
+      operationId: checkIn
+      tags: [seats]
+      summary: Check in to a seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Checked in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seat"
+        "400":
+          description: Seat not available
+
+  /seats/{id}/away:
+    post:
+      operationId: markAway
+      tags: [seats]
+      summary: Mark seat as away
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Marked away
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seat"
+
+  /seats/{id}/checkout:
+    post:
+      operationId: checkOut
+      tags: [seats]
+      summary: Check out from a seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Checked out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seat"
+
+  /seats/{id}/release:
+    post:
+      operationId: releaseSeat
+      tags: [seats]
+      summary: Release (admin) a seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Released
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Seat"
+
+  /seats/{id}/noise:
+    post:
+      operationId: reportNoise
+      tags: [noise]
+      summary: Report noise level at a seat
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NoiseInput"
+      responses:
+        "200":
+          description: Noise reported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /noise/heatmap:
+    get:
+      operationId: getNoiseHeatmap
+      tags: [noise]
+      summary: Get noise heatmap for all zones
+      responses:
+        "200":
+          description: Noise heatmap
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NoiseZone"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Get library statistics
+      responses:
+        "200":
+          description: Stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LibraryStats"
+
+  /stats/forecast:
+    get:
+      operationId: getOccupancyForecast
+      tags: [stats]
+      summary: Get occupancy forecast for next 8 hours
+      responses:
+        "200":
+          description: Forecast
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ForecastPoint"
+
+  /activity:
+    get:
+      operationId: listActivity
+      tags: [activity]
+      summary: List recent activity
+      responses:
+        "200":
+          description: Activity feed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityEvent"
+
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [profile]
+      summary: Get user profile
+      responses:
+        "200":
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileData"
+
+  /queue/join:
+    post:
+      operationId: joinQueue
+      tags: [queue]
+      summary: Join the seat waitlist
+      responses:
+        "200":
+          description: Joined queue
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueStatus"
+        "400":
+          description: Already in queue
+
+  /queue/leave:
+    post:
+      operationId: leaveQueue
+      tags: [queue]
+      summary: Leave the seat waitlist
+      responses:
+        "200":
+          description: Left queue
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /queue/status:
+    get:
+      operationId: getQueueStatus
+      tags: [queue]
+      summary: Get queue position and status
+      responses:
+        "200":
+          description: Queue status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QueueStatus"
+
+  /queue:
+    get:
+      operationId: listQueue
+      tags: [queue]
+      summary: (Admin) List full queue
+      responses:
+        "200":
+          description: Queue list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QueueEntry"
+
+  /gamification/profile:
+    get:
+      operationId: getGamificationProfile
+      tags: [gamification]
+      summary: Get user badges, streaks, and achievements
+      responses:
+        "200":
+          description: Gamification profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GamificationProfile"
+
+  /gamification/leaderboard:
+    get:
+      operationId: getLeaderboard
+      tags: [gamification]
+      summary: Get weekly study leaderboard
+      responses:
+        "200":
+          description: Leaderboard
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  /lost-found:
+    get:
+      operationId: listLostFound
+      tags: [lostfound]
+      summary: List lost and found items
+      responses:
+        "200":
+          description: Lost and found items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LostFoundItem"
+    post:
+      operationId: reportLostFound
+      tags: [lostfound]
+      summary: Report a lost item at a desk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LostFoundInput"
+      responses:
+        "201":
+          description: Item reported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LostFoundItem"
+
+  /lost-found/{id}/claim:
+    patch:
+      operationId: claimLostFound
+      tags: [lostfound]
+      summary: Mark an item as claimed
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Claimed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LostFoundItem"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    MessageResponse:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+
+    User:
+      type: object
+      required: [id, name, email, role]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+
+    Seat:
+      type: object
+      required: [id, number, zone, row, status]
+      properties:
+        id:
+          type: integer
+        number:
+          type: string
+        zone:
+          type: string
+        row:
+          type: integer
+        status:
+          type: string
+        studentName:
+          type: ["string", "null"]
+        checkedInAt:
+          type: ["string", "null"]
+        lastActivity:
+          type: ["string", "null"]
+        awayEndsAt:
+          type: ["string", "null"]
+
+    SeatRecommendation:
+      type: object
+      required: [seat, score, reasons]
+      properties:
+        seat:
+          $ref: "#/components/schemas/Seat"
+        score:
+          type: integer
+        reasons:
+          type: array
+          items:
+            type: string
+
+    LibraryStats:
+      type: object
+      required: [total, available, occupied, away, abandoned, occupancyRate, peakHours, zoneBreakdown]
+      properties:
+        total:
+          type: integer
+        available:
+          type: integer
+        occupied:
+          type: integer
+        away:
+          type: integer
+        abandoned:
+          type: integer
+        occupancyRate:
+          type: integer
+        peakHours:
+          type: array
+          items:
+            $ref: "#/components/schemas/PeakHour"
+        zoneBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/ZoneStat"
+
+    PeakHour:
+      type: object
+      required: [hour, count]
+      properties:
+        hour:
+          type: string
+        count:
+          type: integer
+
+    ZoneStat:
+      type: object
+      required: [zone, available, occupied, away, abandoned]
+      properties:
+        zone:
+          type: string
+        available:
+          type: integer
+        occupied:
+          type: integer
+        away:
+          type: integer
+        abandoned:
+          type: integer
+
+    ForecastPoint:
+      type: object
+      required: [hour, label, predictedOccupancy, confidence]
+      properties:
+        hour:
+          type: integer
+        label:
+          type: string
+        predictedOccupancy:
+          type: integer
+        confidence:
+          type: string
+
+    ActivityEvent:
+      type: object
+      required: [id, seatNumber, event, type, timestamp]
+      properties:
+        id:
+          type: integer
+        seatNumber:
+          type: string
+        event:
+          type: string
+        student:
+          type: ["string", "null"]
+        type:
+          type: string
+        timestamp:
+          type: string
+
+    ProfileData:
+      type: object
+      required: [user, totalSessions, totalHours, favoriteZone, recentSessions]
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        totalSessions:
+          type: integer
+        totalHours:
+          type: string
+        favoriteZone:
+          type: string
+        recentSessions:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudySession"
+
+    StudySession:
+      type: object
+      required: [id, date, seatNumber, zone, duration]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        seatNumber:
+          type: string
+        zone:
+          type: string
+        duration:
+          type: string
+
+    NoiseInput:
+      type: object
+      required: [level]
+      properties:
+        level:
+          type: string
+          enum: [quiet, moderate, noisy]
+
+    NoiseZone:
+      type: object
+      required: [zone, level, reportCount, lastUpdated]
+      properties:
+        zone:
+          type: string
+        level:
+          type: string
+        reportCount:
+          type: integer
+        lastUpdated:
+          type: ["string", "null"]
+
+    QueueStatus:
+      type: object
+      required: [inQueue, position, totalWaiting]
+      properties:
+        inQueue:
+          type: boolean
+        position:
+          type: ["integer", "null"]
+        totalWaiting:
+          type: integer
+        assignedSeat:
+          type: ["string", "null"]
+        status:
+          type: ["string", "null"]
+
+    QueueEntry:
+      type: object
+      required: [id, studentName, joinedAt, status]
+      properties:
+        id:
+          type: integer
+        studentName:
+          type: string
+        joinedAt:
+          type: string
+        status:
+          type: string
+        assignedSeatNumber:
+          type: ["string", "null"]
+
+    GamificationProfile:
+      type: object
+      required: [streak, weeklyMinutes, totalMinutes, badges, rank]
+      properties:
+        streak:
+          type: integer
+        weeklyMinutes:
+          type: integer
+        totalMinutes:
+          type: integer
+        badges:
+          type: array
+          items:
+            $ref: "#/components/schemas/Badge"
+        rank:
+          type: ["integer", "null"]
+
+    Badge:
+      type: object
+      required: [id, name, description, earned]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        earned:
+          type: boolean
+        earnedAt:
+          type: ["string", "null"]
+
+    LeaderboardEntry:
+      type: object
+      required: [rank, name, weeklyMinutes, streak, badges]
+      properties:
+        rank:
+          type: integer
+        name:
+          type: string
+        weeklyMinutes:
+          type: integer
+        streak:
+          type: integer
+        badges:
+          type: integer
+
+    LostFoundItem:
+      type: object
+      required: [id, seatNumber, zone, description, status, reportedAt]
+      properties:
+        id:
+          type: integer
+        seatNumber:
+          type: string
+        zone:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        reportedAt:
+          type: string
+        claimedAt:
+          type: ["string", "null"]
+
+    LostFoundInput:
+      type: object
+      required: [seatId, seatNumber, zone, description]
+      properties:
+        seatId:
+          type: integer
+        seatNumber:
+          type: string
+        zone:
+          type: string
+        description:
+          type: string
